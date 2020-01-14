@@ -139,7 +139,7 @@ RUN \
 
 RUN apk add --no-cache --virtual=build-dependencies \
     libffi-dev gcc libc-dev openssl-dev && \
-    apk add --no-cache libffi && \
+    apk add --no-cache libffi libssl1.1 && \
     pip3 install -U python-miio && \
     apk del --purge build-dependencies
 
