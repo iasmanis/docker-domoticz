@@ -1,9 +1,16 @@
 FROM lsiobase/alpine:3.10
 
 # set version label
-ARG BUILD_DATE
-ARG VERSION
-ARG DOMOTICZ_COMMIT
+ARG BUILD_DATE=
+ARG VERSION=
+ARG GIT_COMMIT=
+ARG GIT_DESCRIBE=
+# Stable Release 4.10717
+ARG DOMOTICZ_COMMIT=be79a17d8baebed5fad1c81d6c11ad71f2dc19c3
+ARG PYTHON_BROADLINK_COMMIT=8bc67af6
+ENV GIT_DESCRIBE $GIT_DESCRIBE
+ENV GIT_COMMIT $GIT_COMMIT
+ENV DOMOTICZ_COMMIT $DOMOTICZ_COMMIT
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="saarg"
 
@@ -16,6 +23,9 @@ COPY patches/ /
 RUN \
     echo "**** install build packages ****" && \
     apk add --no-cache --virtual=build-dependencies \
+    libffi-dev \
+    libc-dev \
+    openssl-dev \
     argp-standalone \
     autoconf \
     automake \
@@ -113,9 +123,19 @@ RUN \
     echo "**** install BroadlinkRM2 plugin dependencies ****" && \
     git clone https://github.com/mjg59/python-broadlink.git /tmp/python-broadlink && \
     cd /tmp/python-broadlink && \
-    git checkout 8bc67af6 && \
+    git checkout $PYTHON_BROADLINK_COMMIT && \
     pip3 install --no-cache-dir . && \
     pip3 install --no-cache-dir pyaes && \
+    pip3 install --no-cache-dir python-miio && \
+    echo "****  installing Domoticz-AirPurifier-Plugin ****" && \
+    git clone https://github.com/iasmanis/Domoticz-AirPurifier-Plugin.git "${HOME}/plugins/Domoticz-AirPurifier-Plugin" && \
+    echo "TODO pin release" && \
+    echo "****  installing Domoticz-Tuya-Thermostat-Plugin ****" && \
+    git clone https://github.com/iasmanis/Domoticz-Tuya-Thermostat-Plugin.git "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin" && \
+    echo "TODO pin release" && \
+    echo "****  installing Broadlink-RM2-Universal-IR-Remote-Controller-Domoticz-plugin ****" && \
+    git clone https://github.com/Whilser/Broadlink-RM2-Universal-IR-Remote-Controller-Domoticz-plugin.git "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin" && \
+    echo "TODO pin release" && \
     echo "**** determine runtime packages using scanelf ****" && \
     RUNTIME_PACKAGES="$( \
     scanelf --needed --nobanner /var/lib/domoticz/domoticz \
@@ -125,7 +145,7 @@ RUN \
     | sort -u \
     )" && \
     apk add --no-cache \
-    $RUNTIME_PACKAGES && \
+    $RUNTIME_PACKAGES libffi libssl1.1 && \
     echo "**** add abc to dialout and cron group ****" && \
     usermod -a -G 16,20 abc && \
     echo " **** cleanup ****" && \
@@ -136,12 +156,6 @@ RUN \
     /usr/lib/libftdi* \
     /usr/include/ftdi.h
 
-
-RUN apk add --no-cache --virtual=build-dependencies \
-    libffi-dev gcc libc-dev openssl-dev && \
-    apk add --no-cache libffi libssl1.1 && \
-    pip3 install -U python-miio && \
-    apk del --purge build-dependencies
 
 # copy local files
 COPY root/ /
