@@ -64,6 +64,8 @@ RUN \
     iputils \
     libressl \
     openssh \
+    libffi \
+    libssl1.1 \
     python3-dev && \
     echo "**** link libftdi libs ****" && \
     ln -s /usr/lib/libftdi1.so /usr/lib/libftdi.so && \
@@ -87,17 +89,6 @@ RUN \
     mv /tmp/telldus-core/client/telldus-core.h /usr/include/telldus-core.h && \
     ln -s /usr/lib/libtelldus-core.so.2.1.2 /usr/lib/libtelldus-core.so.2 && \
     ln -s /usr/lib/libtelldus-core.so.2 /usr/lib/libtelldus-core.so && \
-    echo "**** build openzwave ****" && \
-    git clone https://github.com/OpenZWave/open-zwave.git /tmp/open-zwave && \
-    ln -s /tmp/open-zwave /tmp/open-zwave-read-only && \
-    cd /tmp/open-zwave && \
-    make && \
-    make \
-    instlibdir=usr/lib \
-    pkgconfigdir="usr/lib/pkgconfig/" \
-    PREFIX=/usr \
-    sysconfdir=etc/openzwave \
-    install && \
     echo "**** build domoticz ****" && \
     if [ -z ${DOMOTICZ_COMMIT+x} ]; then \
     DOMOTICZ_COMMIT=$(curl -sX GET https://api.github.com/repos/domoticz/domoticz/commits/development \
@@ -110,7 +101,6 @@ RUN \
     -DBUILD_SHARED_LIBS=True \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/var/lib/domoticz \
-    -DOpenZWave=/usr/lib/libopenzwave.so \
     -DUSE_BUILTIN_LUA=ON \
     -DUSE_BUILTIN_MQTT=ON \
     -DUSE_BUILTIN_SQLITE=OFF \
@@ -145,7 +135,7 @@ RUN \
     | sort -u \
     )" && \
     apk add --no-cache \
-    $RUNTIME_PACKAGES libffi libssl1.1 && \
+    $RUNTIME_PACKAGES && \
     echo "**** add abc to dialout and cron group ****" && \
     usermod -a -G 16,20 abc && \
     echo " **** cleanup ****" && \
