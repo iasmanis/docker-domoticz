@@ -55,7 +55,11 @@ echo "==> Building docker image from $SHA"
 echo "Creating docker image $DOCKER_REPO"
 echo "  context: $SRC_PATH"
 
-docker build --build-arg GIT_DESCRIBE="$GIT_DESCRIBE" --build-arg GIT_COMMIT="$GIT_COMMIT" --build-arg DOMOTICZ_COMMIT="$VERSION" -t "${DOCKER_REPO}:${VERSION}" "$SRC_PATH" > /tmp/docker.build.log
+if [ -z "$DOMOTICZ_COMMIT" ]; then
+    DOMOTICZ_COMMIT="$VERSION"
+fi
+
+docker build --build-arg GIT_DESCRIBE="$GIT_DESCRIBE" --build-arg GIT_COMMIT="$GIT_COMMIT" --build-arg DOMOTICZ_COMMIT="$DOMOTICZ_COMMIT" -t "${DOCKER_REPO}:${VERSION}" "$SRC_PATH" > /tmp/docker.build.log
 if [ "$?" != "0" ]; then
   echo "ERROR: failed. See /tmp/docker.build.log"
   exit 1
