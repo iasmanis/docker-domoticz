@@ -16,18 +16,11 @@ if [ "$?" != "0" ]; then
     exit 1
 fi
 
-echo "==> Determining version ID"
-VERSION=$(git describe "$TAG")
-if [ "$?" != "0" ]; then
-    echo "ERROR: could not determine version ID"
-    exit 1
-fi
-
 DOCKER_REPO="$(cat REPO_NAME)"
 
 echo "==> Detecting GIT params to pass to Dockerfile"
-GIT_COMMIT="$(git rev-parse --short HEAD)"
-echo "    GIT_COMMIT: $GIT_COMMIT"
+BUILD_TOOLS_COMMIT="$(git rev-parse --short HEAD)"
+echo "    BUILD_TOOLS_COMMIT: $BUILD_TOOLS_COMMIT"
 GIT_DESCRIBE="$(git describe)"
 echo "    GIT_DESCRIBE: $GIT_DESCRIBE"
 
@@ -51,8 +44,16 @@ echo "Extracting to $SRC_PATH"
 echo "Removing VCS related files"
 find "${SRC_PATH}" -name .git -exec rm -rf {} \; &> /dev/null
 
+latest=0
+if [ -z "$DOMOTICZ_VERSION" ]; then
+    DOMOTICZ_VERSION="$(curl -sX GET https://api.github.com/repos/domoticz/domoticz/releases/latest | jq -r .tag_name)"
+    DOMOTICZ_COMMIT="$DOMOTICZ_VERSION"
+    latest=1
+fi
+
 if [ -z "$DOMOTICZ_COMMIT" ]; then
-    DOMOTICZ_COMMIT="$VERSION"
+    DOMOTICZ_COMMIT="$(curl -sX GET https://api.github.com/repos/domoticz/domoticz/commits/development | jq -r .sha)"
+    DOMOTICZ_VERSION="nigthly"
 fi
 
 echo "==> Building docker image from $SHA"
@@ -60,7 +61,7 @@ echo "Creating docker image $DOCKER_REPO"
 echo "  context: $SRC_PATH"
 echo "  commit: $DOMOTICZ_COMMIT"
 
-docker build --build-arg GIT_DESCRIBE="$GIT_DESCRIBE" --build-arg GIT_COMMIT="$GIT_COMMIT" --build-arg DOMOTICZ_COMMIT="$DOMOTICZ_COMMIT" -t "${DOCKER_REPO}:${VERSION}" "$SRC_PATH" > /tmp/docker.build.log
+docker build --build-arg BUILD_DATE="$(date +%Y-%m-%dT%H:%M:%S)" --build-arg DOMOTICZ_VERSION="$DOMOTICZ_VERSION" --build-arg BUILD_TOOLS_COMMIT="$BUILD_TOOLS_COMMIT" --build-arg DOMOTICZ_COMMIT="$DOMOTICZ_COMMIT" -t "${DOCKER_REPO}:${DOMOTICZ_VERSION}" "$SRC_PATH" > /tmp/docker.build.log
 if [ "$?" != "0" ]; then
     echo "ERROR: failed. See /tmp/docker.build.log"
     exit 1
@@ -68,10 +69,14 @@ fi
 
 echo "==> Pushing docker image"
 
-docker tag "$DOCKER_REPO:$VERSION" "$DOCKER_REPO:latest"
+if [ $latest -eq 1 ]; then
+    docker tag "$DOCKER_REPO:$DOMOTICZ_VERSION" "$DOCKER_REPO:latest"
+fi
 
 if [ "${1:-}" != "--skip-push" ]; then
-    docker push "$DOCKER_REPO:$VERSION"
-    docker push "$DOCKER_REPO:latest"
+    docker push "$DOCKER_REPO:$DOMOTICZ_VERSION"
+    if [ $latest -eq 1 ]; then
+        docker push "$DOCKER_REPO:latest"
+    fi
 fi
 
