@@ -73,6 +73,5 @@ docker tag "$DOCKER_REPO:$VERSION" "$DOCKER_REPO:latest"
 if [ "${1:-}" != "--skip-push" ]; then
     docker push "$DOCKER_REPO:$VERSION"
     docker push "$DOCKER_REPO:latest"
-    git push --tags &> /dev/null
 fi
 
