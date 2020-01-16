@@ -2,17 +2,17 @@ FROM lsiobase/alpine:3.10
 
 # set version label
 ARG BUILD_DATE=
-ARG VERSION=
-ARG GIT_COMMIT=
-ARG GIT_DESCRIBE=
+ARG DOMOTICZ_VERSION=
+ARG BUILD_TOOLS_COMMIT=
 # Stable Release 4.10717
-ARG DOMOTICZ_COMMIT=be79a17d8baebed5fad1c81d6c11ad71f2dc19c3
+ARG DOMOTICZ_COMMIT=
 ARG PYTHON_BROADLINK_COMMIT=8bc67af6
-ENV GIT_DESCRIBE $GIT_DESCRIBE
-ENV GIT_COMMIT $GIT_COMMIT
+ENV BUILD_TOOLS_COMMIT $BUILD_TOOLS_COMMIT
+ENV DOMOTICZ_VERSION $DOMOTICZ_VERSION
+ENV BUILD_DATE $BUILD_DATE
 ENV DOMOTICZ_COMMIT $DOMOTICZ_COMMIT
-LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
-LABEL maintainer="saarg"
+LABEL build_version="Linuxserver.io version:- ${DOMOTICZ_VERSION} Build-date:- ${BUILD_DATE}"
+LABEL maintainer="iasmanis"
 
 # environment settings
 ENV HOME="/config"
@@ -90,10 +90,6 @@ RUN \
     ln -s /usr/lib/libtelldus-core.so.2.1.2 /usr/lib/libtelldus-core.so.2 && \
     ln -s /usr/lib/libtelldus-core.so.2 /usr/lib/libtelldus-core.so && \
     echo "**** build domoticz ****" && \
-    if [ -z ${DOMOTICZ_COMMIT+x} ]; then \
-    DOMOTICZ_COMMIT=$(curl -sX GET https://api.github.com/repos/domoticz/domoticz/commits/development \
-    | jq -r '. | .sha'); \
-    fi && \
     git clone https://github.com/domoticz/domoticz.git /tmp/domoticz && \
     cd /tmp/domoticz && \
     git checkout ${DOMOTICZ_COMMIT} && \
