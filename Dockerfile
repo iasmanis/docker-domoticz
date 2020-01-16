@@ -106,22 +106,38 @@ RUN \
     -Wno-dev && \
     make && \
     make install && \
+    echo "****  installing Broadlink-RM2-Universal-IR-Remote-Controller-Domoticz-plugin ****" && \
+    git clone https://github.com/iasmanis/Domoticz-Broadlink-RM2-Plugin.git "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin" && \
+    cd "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin" && \
+    echo "TODO pin release" && \
+    git rev-parse --short HEAD >> VERSION  && \
+    rm -rf .git && \
     echo "**** install BroadlinkRM2 plugin dependencies ****" && \
-    git clone https://github.com/mjg59/python-broadlink.git /tmp/python-broadlink && \
-    cd /tmp/python-broadlink && \
-    git checkout $PYTHON_BROADLINK_COMMIT && \
+    git clone https://github.com/mjg59/python-broadlink.git "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink" && \
+    cd "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink" && \
+    git rev-parse --short HEAD >> VERSION  && \
+    rm -rf .git && \
     pip3 install --no-cache-dir . && \
     pip3 install --no-cache-dir pyaes && \
     pip3 install --no-cache-dir python-miio && \
+    ln -s "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink/broadlink" "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/broadlink" && \
     echo "****  installing Domoticz-AirPurifier-Plugin ****" && \
     git clone https://github.com/iasmanis/Domoticz-AirPurifier-Plugin.git "${HOME}/plugins/Domoticz-AirPurifier-Plugin" && \
+    cd "${HOME}/plugins/Domoticz-AirPurifier-Plugin" && \
+    git rev-parse --short HEAD >> VERSION  && \
+    rm -rf .git && \
     echo "TODO pin release" && \
     echo "****  installing Domoticz-Tuya-Thermostat-Plugin ****" && \
     git clone https://github.com/iasmanis/Domoticz-Tuya-Thermostat-Plugin.git "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin" && \
+    cd "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin" && \
+    git rev-parse --short HEAD >> VERSION && \
+    rm -rf .git && \
     echo "TODO pin release" && \
-    echo "****  installing Broadlink-RM2-Universal-IR-Remote-Controller-Domoticz-plugin ****" && \
-    git clone https://github.com/Whilser/Broadlink-RM2-Universal-IR-Remote-Controller-Domoticz-plugin.git "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin" && \
-    echo "TODO pin release" && \
+    git clone https://github.com/clach04/python-tuya.git "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya" && \
+    cd "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya" && \
+    git rev-parse --short HEAD >> VERSION && \
+    ln -s "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya/pytuya" "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/pytuya" && \
+    rm -rf .git && \
     echo "**** determine runtime packages using scanelf ****" && \
     RUNTIME_PACKAGES="$( \
     scanelf --needed --nobanner /var/lib/domoticz/domoticz \
