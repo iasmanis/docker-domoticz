@@ -138,6 +138,11 @@ RUN \
     git rev-parse --short HEAD >> VERSION && \
     ln -s "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya/pytuya" "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/pytuya" && \
     rm -rf .git && \
+    echo "****  installing domoticz-zigbee2mqtt-plugin ****" && \
+    git clone https://github.com/stas-demydiuk/domoticz-zigbee2mqtt-plugin.git "${HOME}/plugins/Domoticz-Zigbee2Mqtt-Plugin" && \
+    cd "${HOME}/plugins/Domoticz-Zigbee2Mqtt-Plugin" && \
+    git rev-parse --short HEAD >> VERSION && \
+    rm -rf .git && \
     echo "**** determine runtime packages using scanelf ****" && \
     RUNTIME_PACKAGES="$( \
     scanelf --needed --nobanner /var/lib/domoticz/domoticz \
