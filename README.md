@@ -1,3 +1,31 @@
+
+# Docker Domoticz builder
+
+## Local build procedure
+
+Build locally with `./build.sh`
+
+To build latest stable release run `./build.sh`
+
+Build custom tag with `DOMOTICZ_VERSION=4.1.1224 ./build.sh`
+
+Build from custom commit with `DOMOTICZ_COMMIT=70500a9c6828f8a291ba7947d4d03bfa95cb0580 ./build.sh`
+
+### Dependencies
+
+ - git
+ - docker
+ - jq
+ - bash
+
+## Bundled plugins
+
+[Domoticz-AirPurifier-Plugin](https://github.com/iasmanis/Domoticz-AirPurifier-Plugin.git)
+[Domoticz-Tuya-Thermostat-Plugin](https://github.com/iasmanis/Domoticz-Tuya-Thermostat-Plugin.git)
+[Broadlink-RM2-Universal-IR-Remote-Controller-Domoticz-plugin](https://github.com/Whilser/Broadlink-RM2-Universal-IR-Remote-Controller-Domoticz-plugin.git)
+
+## Info from base repository
+
 [![linuxserver.io](https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/linuxserver_medium.png)](https://linuxserver.io)
 
 [![Blog](https://img.shields.io/static/v1.svg?style=flat-square&color=E68523&label=linuxserver.io&message=Blog)](https://blog.linuxserver.io "all the things you can do with our containers including How-To guides, opinions and much more!")
@@ -146,7 +174,7 @@ Container images are configured using parameters passed at runtime (such as thos
 
 ## Environment variables from files (Docker secrets)
 
-You can set any environment variable from a file by using a special prepend `FILE__`. 
+You can set any environment variable from a file by using a special prepend `FILE__`.
 
 As an example:
 
