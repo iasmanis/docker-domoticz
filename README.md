@@ -23,6 +23,8 @@ Build from custom commit with `DOMOTICZ_COMMIT=70500a9c6828f8a291ba7947d4d03bfa9
  - [Domoticz-AirPurifier-Plugin](https://github.com/iasmanis/Domoticz-AirPurifier-Plugin.git)
  - [Domoticz-Tuya-Thermostat-Plugin](https://github.com/iasmanis/Domoticz-Tuya-Thermostat-Plugin.git)
  - [Broadlink-RM2-Universal-IR-Remote-Controller-Domoticz-plugin](https://github.com/Whilser/Broadlink-RM2-Universal-IR-Remote-Controller-Domoticz-plugin.git)
+ - [Domoticz-Zigbee2Mqtt-Plugin](https://github.com/stas-demydiuk/domoticz-zigbee2mqtt-plugin.git)
+
 
 ## Info from base repository
 
