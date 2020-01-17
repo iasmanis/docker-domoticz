@@ -61,7 +61,7 @@ echo "Creating docker image $DOCKER_REPO"
 echo "  context: $SRC_PATH"
 echo "  commit: $DOMOTICZ_COMMIT"
 
-docker build --build-arg BUILD_DATE="$(date +%Y-%m-%dT%H:%M:%S)" --build-arg DOMOTICZ_VERSION="$DOMOTICZ_VERSION" --build-arg BUILD_TOOLS_COMMIT="$BUILD_TOOLS_COMMIT" --build-arg DOMOTICZ_COMMIT="$DOMOTICZ_COMMIT" -t "${DOCKER_REPO}:${DOMOTICZ_VERSION}" "$SRC_PATH" > /tmp/docker.build.log
+docker build --build-arg DOMOTICZ_VERSION="$DOMOTICZ_VERSION" --build-arg BUILD_TOOLS_COMMIT="$BUILD_TOOLS_COMMIT" --build-arg DOMOTICZ_COMMIT="$DOMOTICZ_COMMIT" -t "${DOCKER_REPO}:${DOMOTICZ_VERSION}" "$SRC_PATH" > /tmp/docker.build.log
 if [ "$?" != "0" ]; then
     echo "ERROR: failed. See /tmp/docker.build.log"
     exit 1
