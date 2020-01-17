@@ -1,6 +1,11 @@
 FROM lsiobase/alpine:3.10
 
 # set version label and commit to check out
+# Minor version refrence table
+# https://www.domoticz.com/wiki/Domoticz_versions_-_Commits#Database_versions
+# Major version reference
+# https://github.com/domoticz/domoticz/blob/development/main/appversion.h
+
 ARG DOMOTICZ_VERSION=4.10693
 ARG DOMOTICZ_COMMIT=649306c4de2371177e186384874206c18e861f7c
 
