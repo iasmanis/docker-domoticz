@@ -11,7 +11,11 @@ ARG DOMOTICZ_COMMIT=70500a9c6
 
 # docker hub should also set this
 ARG SOURCE_COMMIT=
-ARG PYTHON_BROADLINK_COMMIT=8bc67af6
+ARG LIB_PYTHON_BROADLINK_COMMIT=cbb1d67
+ARG LIB_PYTHON_TUYA_COMMIT=bccf747
+ARG PLUGIN_MQTT_DISCOVERY_COMMIT=16e7b50f89661d3cb1ddbf0edec6d9f5f9014539
+ARG PLUGIN_ZIGBEE2MQTT_COMMIT=423da5f
+ARG PLUGIN__COMMIT=cd65a14
 ENV BUILD_TOOLS_COMMIT $SOURCE_COMMIT
 ENV DOMOTICZ_VERSION $DOMOTICZ_VERSION
 ENV DOMOTICZ_COMMIT $DOMOTICZ_COMMIT
@@ -119,7 +123,7 @@ RUN \
     echo "**** install BroadlinkRM2 plugin dependencies ****" && \
     git clone https://github.com/mjg59/python-broadlink.git "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink" && \
     cd "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink" && \
-    git rev-parse --short HEAD >> VERSION  && \
+    git checkout $LIB_PYTHON_BROADLINK_COMMIT  && \
     rm -rf .git && \
     pip3 install --no-cache-dir . && \
     pip3 install --no-cache-dir pyaes && \
@@ -139,13 +143,18 @@ RUN \
     echo "TODO pin release" && \
     git clone https://github.com/clach04/python-tuya.git "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya" && \
     cd "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya" && \
-    git rev-parse --short HEAD >> VERSION && \
+    git checkout $LIB_PYTHON_TUYA_COMMIT  && \
     ln -s "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya/pytuya" "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/pytuya" && \
     rm -rf .git && \
     echo "****  installing domoticz-zigbee2mqtt-plugin ****" && \
     git clone https://github.com/stas-demydiuk/domoticz-zigbee2mqtt-plugin.git "${HOME}/plugins/Domoticz-Zigbee2Mqtt-Plugin" && \
     cd "${HOME}/plugins/Domoticz-Zigbee2Mqtt-Plugin" && \
-    git rev-parse --short HEAD >> VERSION && \
+    git checkout $PLUGIN_ZIGBEE2MQTT_COMMIT  && \
+    rm -rf .git && \
+    echo "****  installing domoticz_mqtt_discovery ****" && \
+    git clone https://github.com/emontnemery/domoticz_mqtt_discovery.git "${HOME}/plugins/Domoticz-Mqtt-Discovery-Plugin" && \
+    cd "${HOME}/plugins/Domoticz-Mqtt-Discovery-Plugin" && \
+    git checkout $PLUGIN_MQTT_DISCOVERY_COMMIT && \
     rm -rf .git && \
     echo "**** determine runtime packages using scanelf ****" && \
     RUNTIME_PACKAGES="$( \
