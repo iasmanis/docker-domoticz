@@ -79,24 +79,6 @@ RUN \
     ln -s /usr/lib/libftdi1.so /usr/lib/libftdi.so && \
     ln -s /usr/lib/libftdi1.a /usr/lib/libftdi.a && \
     ln -s /usr/include/libftdi1/ftdi.h /usr/include/ftdi.h && \
-    echo "**** build telldus-core ****" && \
-    mkdir -p \
-    /tmp/telldus-core && \
-    tar xf /tmp/patches/telldus-core-2.1.2.tar.gz -C \
-    /tmp/telldus-core --strip-components=1 && \
-    curl -o /tmp/telldus-core/Doxyfile.in -L \
-    https://raw.githubusercontent.com/telldus/telldus/master/telldus-core/Doxyfile.in && \
-    cp /tmp/patches/Socket_unix.cpp /tmp/telldus-core/common/Socket_unix.cpp && \
-    cp /tmp/patches/ConnectionListener_unix.cpp /tmp/telldus-core/service/ConnectionListener_unix.cpp && \
-    cp /tmp/patches/CMakeLists.txt /tmp/telldus-core/CMakeLists.txt && \
-    cd /tmp/telldus-core && \
-    cmake -DBUILD_TDADMIN=false -DCMAKE_INSTALL_PREFIX=/tmp/telldus-core . && \
-    make && \
-    echo "**** configure telldus core ****" && \
-    mv /tmp/telldus-core/client/libtelldus-core.so.2.1.2 /usr/lib/libtelldus-core.so.2.1.2 && \
-    mv /tmp/telldus-core/client/telldus-core.h /usr/include/telldus-core.h && \
-    ln -s /usr/lib/libtelldus-core.so.2.1.2 /usr/lib/libtelldus-core.so.2 && \
-    ln -s /usr/lib/libtelldus-core.so.2 /usr/lib/libtelldus-core.so && \
     echo "**** build domoticz ****" && \
     git clone https://github.com/domoticz/domoticz.git /tmp/domoticz && \
     cd /tmp/domoticz && \
