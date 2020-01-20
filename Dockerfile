@@ -75,10 +75,6 @@ RUN \
     libffi \
     libssl1.1 \
     python3-dev && \
-    echo "**** link libftdi libs ****" && \
-    ln -s /usr/lib/libftdi1.so /usr/lib/libftdi.so && \
-    ln -s /usr/lib/libftdi1.a /usr/lib/libftdi.a && \
-    ln -s /usr/include/libftdi1/ftdi.h /usr/include/ftdi.h && \
     echo "**** build domoticz ****" && \
     git clone https://github.com/domoticz/domoticz.git /tmp/domoticz && \
     cd /tmp/domoticz && \
