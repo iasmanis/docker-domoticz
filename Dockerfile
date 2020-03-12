@@ -6,8 +6,8 @@ FROM lsiobase/alpine:3.10
 # Major version reference
 # https://github.com/domoticz/domoticz/blob/development/main/appversion.h
 
-ARG DOMOTICZ_VERSION=4.11609
-ARG DOMOTICZ_COMMIT=70500a9c6
+ARG DOMOTICZ_VERSION=4.11781
+ARG DOMOTICZ_COMMIT=08c5b7421
 
 # docker hub should also set this
 ARG SOURCE_COMMIT=
