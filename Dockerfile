@@ -12,10 +12,10 @@ ARG DOMOTICZ_COMMIT=70500a9c6
 # docker hub should also set this
 ARG SOURCE_COMMIT=
 ARG LIB_PYTHON_BROADLINK_COMMIT=cbb1d67
-ARG LIB_PYTHON_TUYA_COMMIT=bccf747
+ARG LIB_PYTHON_TUYA_COMMIT=23e375ff9f069752bb998b5089525fa9012da9d4
 ARG PLUGIN_MQTT_DISCOVERY_COMMIT=16e7b50
 ARG PLUGIN_ZIGBEE2MQTT_COMMIT=423da5f
-ARG PLUGIN__COMMIT=cd65a14
+ARG PLUGIN_TUYA_THERMOSTAT_COMMIT=5d245e381c7562af35224e7dcf7662b89c9049a1
 ENV BUILD_TOOLS_COMMIT $SOURCE_COMMIT
 ENV DOMOTICZ_VERSION $DOMOTICZ_VERSION
 ENV DOMOTICZ_COMMIT $DOMOTICZ_COMMIT
@@ -116,9 +116,9 @@ RUN \
     echo "****  installing Domoticz-Tuya-Thermostat-Plugin ****" && \
     git clone https://github.com/iasmanis/Domoticz-Tuya-Thermostat-Plugin.git "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin" && \
     cd "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin" && \
+    git checkout $PLUGIN_TUYA_THERMOSTAT_COMMIT && \
     git rev-parse --short HEAD >> VERSION && \
     rm -rf .git && \
-    echo "TODO pin release" && \
     git clone https://github.com/clach04/python-tuya.git "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya" && \
     cd "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya" && \
     git checkout $LIB_PYTHON_TUYA_COMMIT  && \
