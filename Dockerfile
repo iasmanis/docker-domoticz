@@ -1,4 +1,4 @@
-FROM lsiobase/alpine:3.10
+FROM lsiobase/alpine:3.11
 
 # set version label and commit to check out
 # Minor version refrence table
@@ -31,8 +31,13 @@ ENV HOME="/config"
 # copy prebuilds
 COPY patches/ /
 
+# Using edge for dev deps as domoticz makefile requires cmake >= 3.16.5
+# Remove http://dl-cdn.alpinelinux.org/alpine/edge/main after cmake is updated in current
+
 RUN \
     echo "**** install build packages ****" && \
+    echo "cmake can be incomaptible with build-deps" \
+    apk add --no-cache cmake --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main \
     apk add --no-cache --virtual=build-dependencies \
     libffi-dev \
     libc-dev \
@@ -42,7 +47,6 @@ RUN \
     automake \
     binutils \
     boost-dev \
-    cmake \
     confuse-dev \
     curl-dev \
     doxygen \
@@ -63,6 +67,7 @@ RUN \
     musl-dev \
     pkgconf \
     sqlite-dev \
+    libexecinfo-dev \
     tar \
     zlib-dev && \
     echo "**** install runtime packages ****" && \
@@ -73,6 +78,7 @@ RUN \
     curl \
     eudev-libs \
     iputils \
+    libexecinfo \
     libressl \
     openssh \
     libffi \
@@ -152,6 +158,8 @@ RUN \
     echo " **** cleanup ****" && \
     apk del --purge \
     build-dependencies && \
+    apk del --purge \
+    cmake && \
     rm -rf \
     /tmp/* \
     /usr/lib/libftdi* \
