@@ -58,7 +58,7 @@ RUN \
     jq \
     libcurl \
     libftdi1-dev \
-    libressl-dev \
+    openssl-dev \
     libusb-compat-dev \
     libusb-dev \
     linux-headers \
