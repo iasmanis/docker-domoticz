@@ -36,7 +36,6 @@ COPY patches/ /
 
 RUN \
     echo "**** install build packages ****" && \
-    echo "**** cmake can be incompatible with build-deps ****" && \
     apk add --no-cache --virtual=build-dependencies \
     libffi-dev \
     libc-dev \
@@ -117,8 +116,7 @@ RUN \
     -DUSE_STATIC_BOOST=OFF \
     -DUSE_STATIC_LIBSTDCXX=OFF \
     -DUSE_STATIC_OPENZWAVE=OFF \
-    -DOPENSSL_ROOT_DIR=/usr/local/ssl \
-    -DOPENSSL_LIBRARIES=/usr/local/ssl/lib \
+    -DWITH_UTILITIES=OFF \
     -Wno-dev && \
     make && \
     make install && \
