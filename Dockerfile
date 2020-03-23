@@ -36,7 +36,7 @@ COPY patches/ /
 
 RUN \
     echo "**** install build packages ****" && \
-    echo "cmake can be incomaptible with build-deps" && \
+    echo "**** cmake can be incompatible with build-deps ****" && \
     apk add --no-cache cmake --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main && \
     apk add --no-cache --virtual=build-dependencies \
     libffi-dev \
