@@ -68,7 +68,6 @@ RUN \
     musl-dev \
     pkgconf \
     sqlite-dev \
-    libexecinfo-dev \
     tar \
     zlib-dev && \
     echo "**** install runtime packages ****" && \
@@ -79,7 +78,6 @@ RUN \
     curl \
     eudev-libs \
     iputils \
-    libexecinfo \
     libressl \
     openssh \
     openssl \

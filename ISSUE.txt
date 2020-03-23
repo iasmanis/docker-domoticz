@@ -1,0 +1,7 @@
+/usr/lib/gcc/x86_64-alpine-linux-musl/9.2.0/../../../../x86_64-alpine-linux-musl/bin/ld: CMakeFiles/domoticz.dir/main/SignalHandler.cpp.o: in function `dumpstack_backtrace(void*, void*) [clone .isra.0]':
+SignalHandler.cpp:(.text+0x752): undefined reference to `backtrace'
+/usr/lib/gcc/x86_64-alpine-linux-musl/9.2.0/../../../../x86_64-alpine-linux-musl/bin/ld: SignalHandler.cpp:(.text+0x75f): undefined reference to `backtrace_symbols'
+collect2: error: ld returned 1 exit status
+make[2]: *** [CMakeFiles/domoticz.dir/build.make:4280: domoticz] Error 1
+make[1]: *** [CMakeFiles/Makefile2:161: CMakeFiles/domoticz.dir/all] Error 2
+make: *** [Makefile:152: all] Error 2
