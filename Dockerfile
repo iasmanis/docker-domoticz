@@ -172,11 +172,11 @@ RUN \
     $RUNTIME_PACKAGES && \
     echo "**** add abc to dialout and cron group ****" && \
     usermod -a -G 16,20 abc && \
-    echo " **** cleanup ****" && \
-    apk del --purge \
-    build-dependencies && \
+    echo "**** cleanup ****" && \
     cd /tmp/cmake-3.16.5 && \
     make uninstall && \
+    apk del --purge \
+    build-dependencies && \
     rm -rf \
     /tmp/* \
     /usr/lib/libftdi* \
