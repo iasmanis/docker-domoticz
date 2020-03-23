@@ -28,8 +28,8 @@ LABEL maintainer="iasmanis"
 # environment settings
 ENV HOME="/config"
 
-# copy prebuilds
-COPY patches/ /
+# # copy prebuilds
+# COPY patches/ /
 
 # Using edge for dev deps as domoticz makefile requires cmake >= 3.16.5
 # Remove http://dl-cdn.alpinelinux.org/alpine/edge/main after cmake is updated in current
