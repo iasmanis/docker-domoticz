@@ -37,7 +37,6 @@ COPY patches/ /
 RUN \
     echo "**** install build packages ****" && \
     echo "**** cmake can be incompatible with build-deps ****" && \
-    apk add --no-cache cmake --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main && \
     apk add --no-cache --virtual=build-dependencies \
     libffi-dev \
     libc-dev \
@@ -57,8 +56,11 @@ RUN \
     gzip \
     jq \
     libcurl \
-    libftdi1-dev \
-    openssl-dev \
+    libftdi1-dev  \
+    rhash-dev \
+    expat-dev \
+    libarchive-dev \
+    libuv-dev \
     libusb-compat-dev \
     libusb-dev \
     linux-headers \
@@ -81,14 +83,31 @@ RUN \
     libexecinfo \
     libressl \
     openssh \
+    openssl \
+    openssl-libs-static \
     libffi \
     libssl1.1 \
     python3-dev && \
+    echo "**** build cmake ****" && \
+    cd /tmp && \
+    wget https://cmake.org/files/v3.16/cmake-3.16.5.tar.gz && \
+    tar -xvvzf cmake-3.16.5.tar.gz && \
+    cd /tmp/cmake-3.16.5 && \
+    ./bootstrap \
+    --prefix=/usr \
+    --mandir=/share/man \
+    --datadir=/share/$pkgname \
+    --docdir=/share/doc/$pkgname \
+    --system-libs \
+    --no-system-jsoncpp && \
+    make && \
+    make install && \
     echo "**** build domoticz ****" && \
     git clone https://github.com/domoticz/domoticz.git /tmp/domoticz && \
     cd /tmp/domoticz && \
     git checkout ${DOMOTICZ_COMMIT} && \
     cmake \
+    -S./ \
     -DBUILD_SHARED_LIBS=True \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/var/lib/domoticz \
@@ -98,6 +117,8 @@ RUN \
     -DUSE_STATIC_BOOST=OFF \
     -DUSE_STATIC_LIBSTDCXX=OFF \
     -DUSE_STATIC_OPENZWAVE=OFF \
+    -DOPENSSL_ROOT_DIR=/usr/local/ssl \
+    -DOPENSSL_LIBRARIES=/usr/local/ssl/lib \
     -Wno-dev && \
     make && \
     make install && \
@@ -158,8 +179,8 @@ RUN \
     echo " **** cleanup ****" && \
     apk del --purge \
     build-dependencies && \
-    apk del --purge \
-    cmake && \
+    cd /tmp/cmake-3.16.5 && \
+    make uninstall && \
     rm -rf \
     /tmp/* \
     /usr/lib/libftdi* \
