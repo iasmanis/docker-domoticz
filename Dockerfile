@@ -16,7 +16,7 @@ ARG DOMOTICZ_COMMIT=2020.1
 ARG SOURCE_COMMIT=
 ARG LIB_PYTHON_BROADLINK_COMMIT=cbb1d67
 ARG LIB_PYTHON_TUYA_COMMIT=23e375ff9f069752bb998b5089525fa9012da9d4
-ARG PLUGIN_MQTT_DISCOVERY_COMMIT=16e7b50
+ARG PLUGIN_MQTT_DISCOVERY_COMMIT=a56bad5840afe84d6bca995e88ae49ff94bf0aa6
 ARG PLUGIN_ZIGBEE2MQTT_COMMIT=423da5f
 ARG PLUGIN_TUYA_THERMOSTAT_COMMIT=5d245e381c7562af35224e7dcf7662b89c9049a1
 ENV BUILD_TOOLS_COMMIT $SOURCE_COMMIT
@@ -69,6 +69,9 @@ RUN \
     pkgconf \
     sqlite-dev \
     tar \
+    lua5.3-dev \
+    zlib-dev \
+    uthash-dev \
     zlib-dev && \
     echo "**** install runtime packages ****" && \
     apk add --no-cache \
@@ -84,21 +87,27 @@ RUN \
     openssl-libs-static \
     libffi \
     libssl1.1 \
+    lua5.3 \
+    lua5.3-libs \
     python3-dev && \
-    echo "**** build cmake ****" && \
-    cd /tmp && \
-    wget https://cmake.org/files/v3.16/cmake-3.16.5.tar.gz && \
-    tar -xvvzf cmake-3.16.5.tar.gz && \
-    cd /tmp/cmake-3.16.5 && \
-    ./bootstrap \
-    --prefix=/usr \
-    --mandir=/share/man \
-    --datadir=/share/$pkgname \
-    --docdir=/share/doc/$pkgname \
-    --system-libs \
-    --no-system-jsoncpp && \
-    make && \
-    make install && \
+    echo "**** install cmake ****" && \
+    apk add cmake --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main && \
+    # echo "**** build cmake ****" && \
+    # cd /tmp && \
+    # wget https://cmake.org/files/v3.16/cmake-3.16.5.tar.gz && \
+    # tar -xvvzf cmake-3.16.5.tar.gz && \
+    # cd /tmp/cmake-3.16.5 && \
+    # ./bootstrap \
+    # --prefix=/usr \
+    # --mandir=/share/man \
+    # --datadir=/share/$pkgname \
+    # --docdir=/share/doc/$pkgname \
+    # --system-libs \
+    # --no-system-jsoncpp && \
+    # make && \
+    # make install && \
+    true
+RUN true && \
     echo "**** build domoticz ****" && \
     git clone https://github.com/domoticz/domoticz.git /tmp/domoticz && \
     cd /tmp/domoticz && \
@@ -115,6 +124,7 @@ RUN \
     -DUSE_STATIC_LIBSTDCXX=OFF \
     -DUSE_STATIC_OPENZWAVE=OFF \
     -DWITH_UTILITIES=OFF \
+    -DLUA_INCLUDE_DIR=/usr/include \
     -Wno-dev && \
     make && \
     make install && \
@@ -156,7 +166,7 @@ RUN \
     git checkout $PLUGIN_ZIGBEE2MQTT_COMMIT  && \
     rm -rf .git && \
     echo "****  installing domoticz_mqtt_discovery ****" && \
-    git clone https://github.com/emontnemery/domoticz_mqtt_discovery.git "${HOME}/plugins/Domoticz-Mqtt-Discovery-Plugin" && \
+    git clone 	https://github.com/iasmanis/Domoticz-MQTT-Discovery-Plugin.git "${HOME}/plugins/Domoticz-Mqtt-Discovery-Plugin" && \
     cd "${HOME}/plugins/Domoticz-Mqtt-Discovery-Plugin" && \
     git checkout $PLUGIN_MQTT_DISCOVERY_COMMIT && \
     rm -rf .git && \
@@ -173,8 +183,8 @@ RUN \
     echo "**** add abc to dialout and cron group ****" && \
     usermod -a -G 16,20 abc && \
     echo "**** cleanup ****" && \
-    cd /tmp/cmake-3.16.5 && \
-    make uninstall && \
+    # cd /tmp/cmake-3.16.5 && \
+    # make uninstall && \
     apk del --purge \
     build-dependencies && \
     rm -rf \
