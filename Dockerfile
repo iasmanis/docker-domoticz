@@ -6,8 +6,8 @@ FROM lsiobase/alpine:3.11
 # Major version reference
 # https://github.com/domoticz/domoticz/blob/development/main/appversion.h
 
-ARG DOMOTICZ_VERSION=2020.1
-ARG DOMOTICZ_COMMIT=2020.1
+ARG DOMOTICZ_VERSION=2021.1
+ARG DOMOTICZ_COMMIT=2021.1
 
 # ARG DOMOTICZ_VERSION=4.11807
 # ARG DOMOTICZ_COMMIT=f7a465aeb
