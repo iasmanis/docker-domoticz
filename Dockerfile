@@ -137,7 +137,8 @@ RUN true && \
     echo "**** install BroadlinkRM2 plugin dependencies ****" && \
     git clone https://github.com/mjg59/python-broadlink.git "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink" && \
     cd "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink" && \
-    git checkout $LIB_PYTHON_BROADLINK_COMMIT  && \
+    git checkout $LIB_PYTHON_BROADLINK_COMMIT && \
+    # TODO: Use archive instead of plain checkout
     rm -rf .git && \
     pip3 install --no-cache-dir . && \
     pip3 install --no-cache-dir pyaes && \
