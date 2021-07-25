@@ -11,4 +11,4 @@
 
 ## Base image
 
-[![linuxserver/docker-domoticz](https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/linuxserver_medium.png)](https://github.com/linuxserver/docker-domoticz)
+[linuxserver/docker-domoticz](https://github.com/linuxserver/docker-domoticz)
