@@ -3,14 +3,17 @@ FROM linuxserver/domoticz:stable-version-2022.1
 ARG LIB_PYTHON_BROADLINK_COMMIT=cbb1d67
 ARG LIB_PYTHON_TUYA_COMMIT=23e375ff9f069752bb998b5089525fa9012da9d4
 ARG PLUGIN_MQTT_DISCOVERY_COMMIT=a56bad5840afe84d6bca995e88ae49ff94bf0aa6
+# b04305fc5ae906f9f8bb7d0f59e3b1f4e2783616
 ARG PLUGIN_ZIGBEE2MQTT_COMMIT=423da5f
+# v.3.0.0
 ARG PLUGIN_TUYA_THERMOSTAT_COMMIT=5d245e381c7562af35224e7dcf7662b89c9049a1
 
 LABEL build_version="version: ${VERSION}"
 LABEL maintainer="iasmanis"
 
 # environment settings
-ENV HOME="/config"
+ENV HOME="/config" \
+    WEBROOT=/
 
 RUN \
     echo "****  install git  ****" && \
@@ -51,7 +54,7 @@ RUN \
     git checkout $PLUGIN_ZIGBEE2MQTT_COMMIT  && \
     rm -rf .git && \
     echo "****  installing domoticz_mqtt_discovery ****" && \
-    git clone 	https://github.com/iasmanis/Domoticz-MQTT-Discovery-Plugin.git "${HOME}/plugins/Domoticz-Mqtt-Discovery-Plugin" && \
+    git clone https://github.com/iasmanis/Domoticz-MQTT-Discovery-Plugin.git "${HOME}/plugins/Domoticz-Mqtt-Discovery-Plugin" && \
     cd "${HOME}/plugins/Domoticz-Mqtt-Discovery-Plugin" && \
     git checkout $PLUGIN_MQTT_DISCOVERY_COMMIT && \
     rm -rf .git && \
