@@ -1,4 +1,4 @@
-FROM linuxserver/domoticz:stable-version-2021.1
+FROM linuxserver/domoticz:stable-version-2022.1
 
 ARG LIB_PYTHON_BROADLINK_COMMIT=cbb1d67
 ARG LIB_PYTHON_TUYA_COMMIT=23e375ff9f069752bb998b5089525fa9012da9d4
@@ -33,11 +33,6 @@ RUN \
     pip3 install --no-cache-dir pyaes && \
     pip3 install --no-cache-dir python-miio && \
     ln -s "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink/broadlink" "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/broadlink" && \
-    echo "****  installing Domoticz-AirPurifier-Plugin ****" && \
-    git clone https://github.com/iasmanis/Domoticz-AirPurifier-Plugin.git "${HOME}/plugins/Domoticz-AirPurifier-Plugin" && \
-    cd "${HOME}/plugins/Domoticz-AirPurifier-Plugin" && \
-    git rev-parse --short HEAD >> VERSION  && \
-    rm -rf .git && \
     echo "TODO pin release" && \
     echo "****  installing Domoticz-Tuya-Thermostat-Plugin ****" && \
     git clone https://github.com/iasmanis/Domoticz-Tuya-Thermostat-Plugin.git "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin" && \
