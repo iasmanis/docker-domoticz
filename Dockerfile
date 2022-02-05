@@ -5,6 +5,7 @@ ARG LIB_PYTHON_TUYA_COMMIT=23e375ff9f069752bb998b5089525fa9012da9d4
 ARG PLUGIN_MQTT_DISCOVERY_COMMIT=a56bad5840afe84d6bca995e88ae49ff94bf0aa6
 ARG PLUGIN_ZIGBEE2MQTT_COMMIT=423da5f
 ARG PLUGIN_TUYA_THERMOSTAT_COMMIT=5d245e381c7562af35224e7dcf7662b89c9049a1
+ARG PLUGIN_BROADLINK_RM2_COMMIT=HEAD
 
 LABEL build_version="version: ${VERSION}"
 LABEL maintainer="iasmanis"
@@ -17,14 +18,27 @@ RUN \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     git && \
+    true
+
+RUN true && \
     echo "****  installing Broadlink-RM2-Universal-IR-Remote-Controller-Domoticz-plugin ****" && \
-    git clone https://github.com/iasmanis/Domoticz-Broadlink-RM2-Plugin.git "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin" && \
-    cd "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin" && \
+    DEST="${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin" && \
+    TMPD="/tmp/Domoticz-Broadlink-RM2-Plugin" && \
+    mkdir -p "$DEST" && \
+    git clone https://github.com/iasmanis/Domoticz-Broadlink-RM2-Plugin.git "$TMPD" && \
+    cd "$TMPD" && \
+    git rev-parse --short "$PLUGIN_BROADLINK_RM2_COMMIT" >> "$DEST/VERSION" && \
+    git archive --format=tar.gz "$PLUGIN_BROADLINK_RM2_COMMIT" > /tmp/archive.tgz && \
+    cd "$DEST" && \
+    tar -xzf /tmp/archive.tgz && \
     echo "TODO pin release" && \
-    git rev-parse --short HEAD >> VERSION  && \
-    rm -rf .git && \
+    true
+
+RUN true && \
     echo "**** install BroadlinkRM2 plugin dependencies ****" && \
-    git clone https://github.com/mjg59/python-broadlink.git "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink" && \
+    DEST="${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink" && \
+    TMPD="/tmp/Domoticz-Broadlink-RM2-Plugin-python-broadlink" && \
+    git clone https://github.com/mjg59/python-broadlink.git "$TMPD" && \
     cd "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink" && \
     git checkout $LIB_PYTHON_BROADLINK_COMMIT && \
     # TODO: Use archive instead of plain checkout
