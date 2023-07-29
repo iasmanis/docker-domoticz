@@ -1,4 +1,4 @@
-FROM linuxserver/domoticz:version-2023.1
+FROM linuxserver/domoticz:version-2023.2
 
 ARG LIB_PYTHON_BROADLINK_COMMIT=cbb1d67
 ARG LIB_PYTHON_TUYA_COMMIT=23e375ff9f069752bb998b5089525fa9012da9d4
