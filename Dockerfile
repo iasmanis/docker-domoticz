@@ -1,4 +1,4 @@
-FROM linuxserver/domoticz:version-2023.2
+FROM domoticz/domoticz:2025.1
 
 ARG LIB_PYTHON_BROADLINK_COMMIT=cbb1d67
 ARG LIB_PYTHON_TUYA_COMMIT=23e375ff9f069752bb998b5089525fa9012da9d4
@@ -7,18 +7,33 @@ ARG PLUGIN_ZIGBEE2MQTT_COMMIT=v.3.1.0
 # v.3.0.0
 ARG PLUGIN_TUYA_THERMOSTAT_COMMIT=5d245e381c7562af35224e7dcf7662b89c9049a1
 
-LABEL build_version="version: ${VERSION}"
-LABEL maintainer="iasmanis"
+LABEL build_version="version: 2025.1, commit: $(git rev-parse --short HEAD)" \
+    description="Domoticz with Broadlink RM2, Tuya Thermostat, Zigbee2MQTT and MQTT Discovery plugins" \
+    url="https://github.com/iasmanis/docker-domoticz" \
+    maintainer="iasmanis"
 
 # environment settings
 ENV HOME="/config" \
     WEBROOT=/
 
 RUN \
-    echo "****  install git  ****" && \
+    echo "****  install build deps ****" && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-    git && \
+    git \
+    build-essential \
+    gcc \
+    g++ \
+    make \
+    pkg-config \
+    python3-dev \
+    libssl-dev \
+    libffi-dev \
+    libyaml-dev \
+    cargo \
+    rustc && \
+    echo "****  upgrade pip tooling ****" && \
+    pip3 install --no-cache-dir --upgrade pip setuptools wheel && \
     echo "****  installing Broadlink-RM2-Universal-IR-Remote-Controller-Domoticz-plugin ****" && \
     git clone https://github.com/iasmanis/Domoticz-Broadlink-RM2-Plugin.git "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin" && \
     cd "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin" && \
@@ -59,7 +74,8 @@ RUN \
     git checkout $PLUGIN_MQTT_DISCOVERY_COMMIT && \
     rm -rf .git && \
     echo "****  cleanup  ****" && \
-    apt-get purge -y git  && \
+    apt-get purge -y git build-essential gcc g++ make pkg-config python3-dev libssl-dev libffi-dev libyaml-dev cargo rustc && \
+    apt-get autoremove -y --purge && \
     apt-get clean && \
     rm -rf \
     /tmp/* \
