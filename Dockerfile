@@ -1,4 +1,4 @@
-FROM domoticz/domoticz:2025.2 AS builder
+FROM domoticz/domoticz:2026.2 AS builder
 
 ARG LIB_PYTHON_BROADLINK_COMMIT=cbb1d67
 ARG LIB_PYTHON_TUYA_COMMIT=23e375ff9f069752bb998b5089525fa9012da9d4
@@ -96,7 +96,7 @@ RUN echo "**** builder: cleanup ****" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-FROM domoticz/domoticz:2025.2
+FROM domoticz/domoticz:2026.2
 
 # environment settings
 ENV HOME="/config" \
@@ -108,5 +108,5 @@ LABEL build_version="version: 2025.2, commit: $(git rev-parse --short HEAD)" \
     maintainer="iasmanis"
 
 # Copy only the built Python dependencies and plugins from the builder image
-COPY --from=builder /opt/venv/lib/python3.11/site-packages /opt/venv/lib/python3.11/site-packages
+COPY --from=builder /opt/venv/lib/python3.13/site-packages /opt/venv/lib/python3.13/site-packages
 COPY --from=builder /config/plugins /opt/domoticz/userdata/plugins
