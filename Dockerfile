@@ -1,4 +1,4 @@
-FROM domoticz/domoticz:2026.2 AS builder
+FROM domoticz/domoticz:2026.4 AS builder
 
 ARG LIB_PYTHON_BROADLINK_COMMIT=cbb1d67
 ARG LIB_PYTHON_TUYA_COMMIT=23e375ff9f069752bb998b5089525fa9012da9d4
