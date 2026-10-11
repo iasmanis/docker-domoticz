@@ -54,23 +54,6 @@ RUN echo "****  builder: installing Broadlink-RM2-Universal-IR-Remote-Controller
     pip3 install --no-cache-dir python-miio && \
     mv "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/python-broadlink/broadlink" "${HOME}/plugins/Domoticz-Broadlink-RM2-Plugin/broadlink"
 
-# Install Tuya Thermostat plugin
-RUN echo "****  builder: installing Domoticz-Tuya-Thermostat-Plugin ****" && \
-    git clone https://github.com/iasmanis/Domoticz-Tuya-Thermostat-Plugin.git /tmp/Domoticz-Tuya-Thermostat-Plugin && \
-    cd /tmp/Domoticz-Tuya-Thermostat-Plugin && \
-    mkdir -p "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin" && \
-    git rev-parse --short $PLUGIN_TUYA_THERMOSTAT_COMMIT >> "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/VERSION" && \
-    git archive $PLUGIN_TUYA_THERMOSTAT_COMMIT | tar -x -C "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin" && \
-    cd /tmp && \
-    rm -rf /tmp/Domoticz-Tuya-Thermostat-Plugin && \
-    git clone https://github.com/clach04/python-tuya.git /tmp/python-tuya && \
-    cd /tmp/python-tuya && \
-    mkdir -p "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya" && \
-    git archive $LIB_PYTHON_TUYA_COMMIT | tar -x -C "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya" && \
-    cd /tmp && \
-    rm -rf /tmp/python-tuya && \
-    mv "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/python-tuya/pytuya" "${HOME}/plugins/Domoticz-Tuya-Thermostat-Plugin/pytuya"
-
 # Install Zigbee2MQTT plugin
 RUN echo "****  builder: installing domoticz-zigbee2mqtt-plugin ****" && \
     git clone https://github.com/stas-demydiuk/domoticz-zigbee2mqtt-plugin.git /tmp/Domoticz-Zigbee2Mqtt-Plugin && \
@@ -80,23 +63,13 @@ RUN echo "****  builder: installing domoticz-zigbee2mqtt-plugin ****" && \
     cd /tmp && \
     rm -rf /tmp/Domoticz-Zigbee2Mqtt-Plugin
 
-# Install MQTT Discovery plugin
-RUN echo "****  builder: installing domoticz_mqtt_discovery ****" && \
-    # git clone https://github.com/emontnemery/domoticz_mqtt_discovery "${HOME}/plugins/Domoticz-Mqtt-Discovery-Plugin" && \
-    git clone https://github.com/iasmanis/Domoticz-MQTT-Discovery-Plugin.git /tmp/Domoticz-Mqtt-Discovery-Plugin && \
-    cd /tmp/Domoticz-Mqtt-Discovery-Plugin && \
-    mkdir -p "${HOME}/plugins/Domoticz-Mqtt-Discovery-Plugin" && \
-    git archive $PLUGIN_MQTT_DISCOVERY_COMMIT | tar -x -C "${HOME}/plugins/Domoticz-Mqtt-Discovery-Plugin" && \
-    cd /tmp && \
-    rm -rf /tmp/Domoticz-Mqtt-Discovery-Plugin
-
 # Cleanup
 RUN echo "**** builder: cleanup ****" && \
     rm -rf "${HOME}/.cache" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-FROM domoticz/domoticz:2026.2
+FROM domoticz/domoticz:2026.4
 
 # environment settings
 ENV HOME="/config" \
